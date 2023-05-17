@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>BNPL URL Generator</title>
+    <!-- CSS only -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx"
+      crossorigin="anonymous"
+    />
+  </head>
+
+  <body>
+    <nav class="navbar bg-light">
+      <div class="container">
+        <div class="input-group mb-3">
+          <input
+            type="text"
+            id="NIC"
+            class="form-control"
+            placeholder="NIC"
+            value="776655443V"
+          />
+          <input
+            type="number"
+            id="mobile"
+            class="form-control"
+            placeholder="mobile"
+            value="0771234567"
+          />
+          <input
+            type="text"
+            id="firstName"
+            class="form-control"
+            placeholder="firstName"
+            value="Nimal"
+          />
+          <input
+            type="text"
+            id="lastName"
+            class="form-control"
+            placeholder="lastName"
+            value="Fernando"
+          />
+          <button
+            class="btn btn-outline-primary"
+            type="button"
+            id="button-addon2"
+            onClick="generateLink()"
+          >
+            Generate Link
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+      <div class="card">
+        <div class="card-body">
+          <div id="freeZone-stg"></div>
+          <button
+            class="btn btn-secondary"
+            type="button"
+            onClick="copyLink('freeZone-stg')"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              class="bi bi-clipboard"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"
+              />
+              <path
+                d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"
+              />
+            </svg>
+          </button>
+          <a href="#" class="btn btn-primary" id="stg-link" target="_blank"
+            >Staging</a
+          >
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <div id="freeZone-localhost"></div>
+          <button
+            class="btn btn-secondary"
+            type="button"
+            onClick="copyLink('freeZone-localhost')"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              class="bi bi-clipboard"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"
+              />
+              <path
+                d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"
+              />
+            </svg>
+          </button>
+          <a href="#" class="btn btn-primary" id="local-link" target="_blank"
+            >Localhost</a
+          >
+        </div>
+      </div>
+    </div>
+  </body>
+  <script>
+    function copyLink(id) {
+      var copyText = document.getElementById(id).innerHTML;
+      navigator.clipboard.writeText(copyText);
+    }
+
+    function generateLink() {
+      if (document.getElementById("mobile").value !== "") {
+        document.getElementById("stg-link").href = "";
+        document.getElementById("freeZone-stg").innerHTML = "";
+        document.getElementById("freeZone-localhost").innerHTML = "";
+        document.getElementById("local-link").href = "";
+
+        //fetch('http://192.168.0.108:30509/ekyc-bnpl-backend/api/login',
+        fetch("http://localhost:8888/api/login", {
+          method: "post",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            NIC: document.getElementById("NIC").value,
+            mobileNumber: document.getElementById("mobile").value,
+            firstName: document.getElementById("firstName").value,
+            lastName: document.getElementById("lastName").value,
+          }),
+        }).then((response) =>
+          response.json().then((d) => {
+            document.getElementById("stg-link").href = "http://192.168.0.108:30509/ekyc-bnpl-web-spa/extref/?token=" + d.token;
+            document.getElementById("freeZone-stg").innerHTML = "http://192.168.0.108:30509/ekyc-bnpl-web-spa/extref/?token=" + d.token;
+            document.getElementById("local-link").href = "http://localhost:3000/extref/?token=" + d.token;
+            document.getElementById("freeZone-localhost").innerHTML = "http://localhost:3000/extref/?token=" + d.token;
+          })
+        );
+      } else {
+        alert("mobile number is a required field");
+      }
+    }
+  </script>
+  <!-- JavaScript Bundle with Popper -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
+    crossorigin="anonymous"
+  ></script>
+</html>
