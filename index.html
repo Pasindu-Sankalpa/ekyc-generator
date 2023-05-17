@@ -129,7 +129,7 @@
         document.getElementById("freeZone-localhost").innerHTML = "";
         document.getElementById("local-link").href = "";
 
-        fetch('http://192.168.0.108:30509/ekyc-bnpl-backend/api/login',
+        fetch('http://192.168.0.108:30509/ekyc-bnpl-backend/api/login', {
         //fetch("http://localhost:8888/api/login", {
           method: "post",
           headers: {
