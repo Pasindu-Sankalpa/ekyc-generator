@@ -129,43 +129,57 @@
         document.getElementById("freeZone-localhost").innerHTML = "";
         document.getElementById("local-link").href = "";
 
-        fetch('http://192.168.0.108:30509/ekyc-bnpl-backend/api/login', {
-          method: "post",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            NIC: document.getElementById("NIC").value,
-            mobileNumber: document.getElementById("mobile").value,
-            firstName: document.getElementById("firstName").value,
-            lastName: document.getElementById("lastName").value,
-          }),
-        }).then((response) =>
-          response.json().then((d) => {
-            document.getElementById("stg-link").href = "http://192.168.0.108:30509/ekyc-bnpl-web-spa/extref/?token=" + d.token;
-            document.getElementById("freeZone-stg").innerHTML = "http://192.168.0.108:30509/ekyc-bnpl-web-spa/extref/?token=" + d.token;
-          })
-        );
-        
-        fetch("http://localhost:4000/api/login", {
-          method: "post",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            NIC: document.getElementById("NIC").value,
-            mobileNumber: document.getElementById("mobile").value,
-            firstName: document.getElementById("firstName").value,
-            lastName: document.getElementById("lastName").value,
-          }),
-        }).then((response) =>
-          response.json().then((d) => {
-            document.getElementById("local-link").href = "http://localhost:3000/extref/?token=" + d.token;
-            document.getElementById("freeZone-localhost").innerHTML = "http://localhost:3000/extref/?token=" + d.token;
-          })
-        );
+        try {
+          fetch("http://192.168.0.108:30509/ekyc-bnpl-backend/api/login", {
+            method: "post",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              NIC: document.getElementById("NIC").value,
+              mobileNumber: document.getElementById("mobile").value,
+              firstName: document.getElementById("firstName").value,
+              lastName: document.getElementById("lastName").value,
+            }),
+          }).then((response) =>
+            response.json().then((d) => {
+              document.getElementById("stg-link").href =
+                "http://192.168.0.108:30509/ekyc-bnpl-web-spa/extref/?token=" +
+                d.token;
+              document.getElementById("freeZone-stg").innerHTML =
+                "http://192.168.0.108:30509/ekyc-bnpl-web-spa/extref/?token=" +
+                d.token;
+            })
+          );
+        } catch (error) {
+          console.log("Deployed server is not responding");
+        }
+
+        try {
+          fetch("http://localhost:4000/api/login", {
+            method: "post",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              NIC: document.getElementById("NIC").value,
+              mobileNumber: document.getElementById("mobile").value,
+              firstName: document.getElementById("firstName").value,
+              lastName: document.getElementById("lastName").value,
+            }),
+          }).then((response) =>
+            response.json().then((d) => {
+              document.getElementById("local-link").href =
+                "http://localhost:3000/extref/?token=" + d.token;
+              document.getElementById("freeZone-localhost").innerHTML =
+                "http://localhost:3000/extref/?token=" + d.token;
+            })
+          );
+        } catch (error) {
+          console.log("Localhost server is not responding");
+        }
       } else {
-        alert("mobile number is a required field");
+        alert("Mobile number is a required field");
       }
     }
   </script>
