@@ -153,13 +153,7 @@
             })
           )
           .catch((error) => {
-            if (error.code === "ECONNREFUSED") {
-              // Handle the connection refused error
-              console.log("Deployed server is not responding");
-            } else {
-              // Handle other types of errors
-              console.error("An error occurred:", error);
-            }
+            console.log("Deployed server is not responding");
           });
 
         fetch("http://localhost:4000/api/login", {
@@ -183,13 +177,7 @@
             })
           )
           .catch((error) => {
-            if (error.code === "ECONNREFUSED") {
-              // Handle the connection refused error
-              console.log("Localhost server is not responding");
-            } else {
-              // Handle other types of errors
-              console.error("An error occurred:", error);
-            }
+            console.log("Localhost server is not responding");
           });
 
       } else {
