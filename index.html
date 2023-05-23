@@ -180,6 +180,7 @@
             })
           )
           .catch((error) => {
+            reject(error)
             console.log("Localhost server is not responding");
           });
         } catch(error) {
