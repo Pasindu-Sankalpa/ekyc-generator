@@ -130,6 +130,7 @@
         document.getElementById("freeZone-localhost").innerHTML = "";
         document.getElementById("local-link").href = "";
 
+        
         fetch("http://192.168.0.108:30509/ekyc-bnpl-backend/api/login", {
           method: "post",
           headers: {
@@ -155,7 +156,9 @@
           .catch((error) => {
             console.log("Deployed server is not responding");
           });
+        
 
+        try {
         fetch("http://localhost:4000/api/login", {
           method: "post",
           headers: {
@@ -179,6 +182,9 @@
           .catch((error) => {
             console.log("Localhost server is not responding");
           });
+        } catch(error) {
+          console.log("not not")
+        }
 
       } else {
         alert("Mobile number is a required field");
