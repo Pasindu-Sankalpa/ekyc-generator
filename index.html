@@ -157,8 +157,7 @@
             console.log("Deployed server is not responding");
           });
         
-        try {
-        fetch("http://localhost:4000/api/login", {
+        await fetch("http://localhost:4000/api/login", {
           method: "post",
           headers: {
             "Content-Type": "application/json",
@@ -182,9 +181,6 @@
             console.log("Localhost server is not responding");
             reject(error)
           });
-        } catch(error){
-          console.log("nnnnnn")
-        }
 
       } else {
         alert("Mobile number is a required field");
