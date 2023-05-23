@@ -123,7 +123,7 @@
       navigator.clipboard.writeText(copyText);
     }
 
-    function generateLink() {
+    async function generateLink() {
       if (document.getElementById("mobile").value !== "") {
         document.getElementById("stg-link").href = "";
         document.getElementById("freeZone-stg").innerHTML = "";
@@ -159,7 +159,7 @@
         
 
         try {
-        const aa = fetch("http://localhost:4000/api/login", {
+        await fetch("http://localhost:4000/api/login", {
           method: "post",
           headers: {
             "Content-Type": "application/json",
