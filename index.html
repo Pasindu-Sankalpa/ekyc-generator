@@ -17,13 +17,6 @@
       <div class="container">
         <div class="input-group mb-3">
           <input
-            type="text"
-            id="NIC"
-            class="form-control"
-            placeholder="NIC"
-            value="776655443V"
-          />
-          <input
             type="number"
             id="mobile"
             class="form-control"
@@ -134,9 +127,9 @@
           method: "post",
           headers: {
             "Content-Type": "application/json",
+            "kyc_client_secret": "DQ93HFNUQEBFQ39BEOANIOA833NFBF8BF3ONF3",
           },
           body: JSON.stringify({
-            NIC: document.getElementById("NIC").value,
             mobileNumber: document.getElementById("mobile").value,
             firstName: document.getElementById("firstName").value,
             lastName: document.getElementById("lastName").value,
@@ -144,12 +137,16 @@
         })
           .then((response) =>
             response.json().then((d) => {
-              document.getElementById("stg-link").href =
-                "http://192.168.0.108:30509/ekyc-bnpl-web-spa/extref/?token=" +
-                d.token;
-              document.getElementById("freeZone-stg").innerHTML =
-                "http://192.168.0.108:30509/ekyc-bnpl-web-spa/extref/?token=" +
-                d.token;
+              if (d.error) {
+                alert("Invalid secret code");
+              } else {
+                document.getElementById("stg-link").href =
+                  "http://192.168.0.108:30509/ekyc-bnpl-web-spa/extref/?token=" +
+                  d.token;
+                document.getElementById("freeZone-stg").innerHTML =
+                  "http://192.168.0.108:30509/ekyc-bnpl-web-spa/extref/?token=" +
+                  d.token;
+              }
             })
           )
           .catch((error) => {
