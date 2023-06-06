@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>BNPL URL Generator</title>
+    <title>BNPL-eKYC URL Generator</title>
     <link rel="icon" href="data:;base64,=" />
     <!-- CSS only -->
     <link
@@ -52,11 +52,40 @@
     <div class="container">
       <div class="card">
         <div class="card-body">
-          <div id="freeZone-stg"></div>
+          <div id="stg-fin"></div>
           <button
             class="btn btn-secondary"
             type="button"
-            onClick="copyLink('freeZone-stg')"
+            onClick="copyLink('stg-fin')"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              class="bi bi-clipboard"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"
+              />
+              <path
+                d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"
+              />
+            </svg>
+          </button>
+          <a href="#" class="btn btn-primary" id="stg-link-fin" target="_blank"
+            >Staging Fintech</a
+          >
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <div id="stg"></div>
+          <button
+            class="btn btn-secondary"
+            type="button"
+            onClick="copyLink('stg')"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -81,11 +110,11 @@
       </div>
       <div class="card">
         <div class="card-body">
-          <div id="freeZone-localhost"></div>
+          <div id="localhost"></div>
           <button
             class="btn btn-secondary"
             type="button"
-            onClick="copyLink('freeZone-localhost')"
+            onClick="copyLink('localhost')"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -119,9 +148,39 @@
     function generateLink() {
       if (document.getElementById("mobile").value !== "") {
         document.getElementById("stg-link").href = "";
-        document.getElementById("freeZone-stg").innerHTML = "";
-        document.getElementById("freeZone-localhost").innerHTML = "";
+        document.getElementById("stg").innerHTML = "";
+        document.getElementById("localhost").innerHTML = "";
         document.getElementById("local-link").href = "";
+
+        fetch("https://portal.idte.axiatadigitallabs.com/ekyc-bnpl-be-ekyc-bnpl-backend/api/login", {
+          method: "post",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            "kyc_client_secret": "DQ93HFNUQEBFQ39BEOANIOA833NFBF8BF3ONF3",
+            mobileNumber: document.getElementById("mobile").value,
+            firstName: document.getElementById("firstName").value,
+            lastName: document.getElementById("lastName").value,
+          }),
+        })
+          .then((response) =>
+            response.json().then((d) => {
+              if (d.error) {
+                alert("Invalid secret code");
+              } else {
+                document.getElementById("stg-link-fin").href =
+                  "http://192.168.0.108:30509/ekyc-bnpl-web-spa/extref/?token=" +
+                  d.token;
+                document.getElementById("stg-fin").innerHTML =
+                  "http://192.168.0.108:30509/ekyc-bnpl-web-spa/extref/?token=" +
+                  d.token;
+              }
+            })
+          )
+          .catch((error) => {
+            console.log("Deployed server is not responding");
+          });
         
         fetch("http://192.168.0.108:30509/ekyc-bnpl-backend/api/login", {
           method: "post",
@@ -143,7 +202,7 @@
                 document.getElementById("stg-link").href =
                   "http://192.168.0.108:30509/ekyc-bnpl-web-spa/extref/?token=" +
                   d.token;
-                document.getElementById("freeZone-stg").innerHTML =
+                document.getElementById("stg").innerHTML =
                   "http://192.168.0.108:30509/ekyc-bnpl-web-spa/extref/?token=" +
                   d.token;
               }
@@ -168,7 +227,7 @@
             response.json().then((d) => {
               document.getElementById("local-link").href =
                 "http://localhost:3000/extref/?token=" + d.token;
-              document.getElementById("freeZone-localhost").innerHTML =
+              document.getElementById("localhost").innerHTML =
                 "http://localhost:3000/extref/?token=" + d.token;
             })
           )
