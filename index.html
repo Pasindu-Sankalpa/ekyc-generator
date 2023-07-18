@@ -127,7 +127,7 @@
         document.getElementById("localhost").innerHTML = "";
         document.getElementById("local-link").href = "";
         
-        fetch("http://192.168.0.108:30509/ekyc-bnpl-backend/api/login", {
+        fetch("ekyc-be.vercel.app/api/login", {
           method: "post",
           headers: {
             "Content-Type": "application/json",
