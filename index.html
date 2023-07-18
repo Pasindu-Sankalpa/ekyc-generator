@@ -145,10 +145,10 @@
                 alert("Invalid secret code");
               } else {
                 document.getElementById("stg-link").href =
-                  "http://192.168.0.108:30509/ekyc-bnpl-web-spa/extref/?token=" +
+                  "https://ekyc-fe.vercel.app/extref/?token=" +
                   d.token;
                 document.getElementById("stg").innerHTML =
-                  "http://192.168.0.108:30509/ekyc-bnpl-web-spa/extref/?token=" +
+                  "https://ekyc-fe.vercel.app/extref/?token=" +
                   d.token;
               }
             })
